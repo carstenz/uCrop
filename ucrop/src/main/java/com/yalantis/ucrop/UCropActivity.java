@@ -270,6 +270,7 @@ public class UCropActivity extends AppCompatActivity {
         } else if (aspectRatioList != null && aspectRationSelectedByDefault < aspectRatioList.size()) {
             mGestureCropImageView.setTargetAspectRatio(aspectRatioList.get(aspectRationSelectedByDefault).getAspectRatioX() /
                     aspectRatioList.get(aspectRationSelectedByDefault).getAspectRatioY());
+            setCircleCrop(aspectRatioList.get(aspectRationSelectedByDefault).isCircle());
         } else {
             mGestureCropImageView.setTargetAspectRatio(CropImageView.SOURCE_IMAGE_ASPECT_RATIO);
         }
@@ -281,6 +282,20 @@ public class UCropActivity extends AppCompatActivity {
         if (maxSizeX > 0 && maxSizeY > 0) {
             mGestureCropImageView.setMaxResultImageSizeX(maxSizeX);
             mGestureCropImageView.setMaxResultImageSizeY(maxSizeY);
+        }
+    }
+
+    private void setCircleCrop(boolean circleCrop) {
+        mGestureCropImageView.setCircleCrop(circleCrop);
+
+        if (circleCrop) {
+            mOverlayView.setCircleDimmedLayer(true);
+            mOverlayView.setShowCropFrame(false);
+            mOverlayView.setShowCropGrid(false);
+        } else {
+            mOverlayView.setCircleDimmedLayer(getIntent().getBooleanExtra(UCrop.Options.EXTRA_CIRCLE_DIMMED_LAYER, OverlayView.DEFAULT_CIRCLE_DIMMED_LAYER));
+            mOverlayView.setShowCropFrame(getIntent().getBooleanExtra(UCrop.Options.EXTRA_SHOW_CROP_FRAME, OverlayView.DEFAULT_SHOW_CROP_FRAME));
+            mOverlayView.setShowCropGrid(getIntent().getBooleanExtra(UCrop.Options.EXTRA_SHOW_CROP_GRID, OverlayView.DEFAULT_SHOW_CROP_GRID));
         }
     }
 
@@ -471,8 +486,9 @@ public class UCropActivity extends AppCompatActivity {
             cropAspectRatioView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mGestureCropImageView.setTargetAspectRatio(
-                            ((AspectRatioTextView) ((ViewGroup) v).getChildAt(0)).getAspectRatio(v.isSelected()));
+                    AspectRatioTextView ratioTextView = ((AspectRatioTextView) ((ViewGroup) v).getChildAt(0));
+                    mGestureCropImageView.setTargetAspectRatio(ratioTextView.getAspectRatio(v.isSelected()));
+                    setCircleCrop(ratioTextView.isCircle());
                     mGestureCropImageView.setImageToWrapCropBounds();
                     if (!v.isSelected()) {
                         for (ViewGroup cropAspectRatioView : mCropAspectRatioViews) {
@@ -669,7 +685,7 @@ public class UCropActivity extends AppCompatActivity {
 
             @Override
             public void onBitmapCropped(@NonNull Uri resultUri, int offsetX, int offsetY, int imageWidth, int imageHeight) {
-                setResultUri(resultUri, mGestureCropImageView.getTargetAspectRatio(), offsetX, offsetY, imageWidth, imageHeight);
+                setResultUri(resultUri, mGestureCropImageView.getTargetAspectRatio(), mGestureCropImageView.isCircleCrop(), offsetX, offsetY, imageWidth, imageHeight);
                 finish();
             }
 
@@ -681,10 +697,11 @@ public class UCropActivity extends AppCompatActivity {
         });
     }
 
-    protected void setResultUri(Uri uri, float resultAspectRatio, int offsetX, int offsetY, int imageWidth, int imageHeight) {
+    protected void setResultUri(Uri uri, float resultAspectRatio, boolean circleCrop, int offsetX, int offsetY, int imageWidth, int imageHeight) {
         setResult(RESULT_OK, new Intent()
                 .putExtra(UCrop.EXTRA_OUTPUT_URI, uri)
                 .putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio)
+                .putExtra(UCrop.EXTRA_OUTPUT_CIRCLE_CROP, circleCrop)
                 .putExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, imageWidth)
                 .putExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT, imageHeight)
                 .putExtra(UCrop.EXTRA_OUTPUT_OFFSET_X, offsetX)
