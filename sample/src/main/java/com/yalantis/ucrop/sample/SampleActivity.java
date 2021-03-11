@@ -29,6 +29,8 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 import com.yalantis.ucrop.UCropFragment;
 import com.yalantis.ucrop.UCropFragmentCallback;
+import com.yalantis.ucrop.model.AspectRatio;
+import com.yalantis.ucrop.view.CropImageView;
 
 import java.io.File;
 import java.util.Locale;
@@ -347,16 +349,16 @@ public class SampleActivity extends BaseActivity implements UCropFragmentCallbac
         options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
         options.setRootViewBackgroundColor(ContextCompat.getColor(this, R.color.your_color_res));
         options.setActiveControlsWidgetColor(ContextCompat.getColor(this, R.color.your_color_res));
+       */
 
         // Aspect ratio options
         options.setAspectRatioOptions(1,
-            new AspectRatio("WOW", 1, 2),
-            new AspectRatio("MUCH", 3, 4),
-            new AspectRatio("RATIO", CropImageView.DEFAULT_ASPECT_RATIO, CropImageView.DEFAULT_ASPECT_RATIO),
-            new AspectRatio("SO", 16, 9),
-            new AspectRatio("ASPECT", 1, 1));
+            new AspectRatio(null, 1, 2),
+            new AspectRatio(null, 3, 4),
+            new AspectRatio("Original", CropImageView.DEFAULT_ASPECT_RATIO, CropImageView.DEFAULT_ASPECT_RATIO),
+            new AspectRatio("Circle", 1, 1, true),
+            new AspectRatio("Square", 1, 1));
 
-       */
 
         return uCrop.withOptions(options);
     }
