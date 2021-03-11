@@ -1,11 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:drawable="@drawable/ucrop_vector_loader">
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:drawable="@drawable/ucrop_vector_loader">
+    <target android:name="circleGroup">
+        <aapt:attr name="android:animation">
+            <set>
+                <objectAnimator
+                    android:duration="@integer/ucrop_progress_loading_anim_time"
+                    android:propertyName="scaleX"
+                    android:repeatCount="-1"
+                    android:valueFrom="0.666"
+                    android:valueTo="1.0"
+                    android:valueType="floatType" />
+
+                <objectAnimator
+                    android:duration="@integer/ucrop_progress_loading_anim_time"
+                    android:propertyName="scaleY"
+                    android:repeatCount="-1"
+                    android:valueFrom="0.666"
+                    android:valueTo="1.0"
+                    android:valueType="floatType" />
+
+                <objectAnimator
+                    android:duration="@integer/ucrop_progress_loading_anim_time"
+                    android:propertyName="rotation"
+                    android:repeatCount="-1"
+                    android:valueFrom="0"
+                    android:valueTo="360"
+                    android:valueType="floatType" />
+
+            </set>
+        </aapt:attr>
+    </target>
     <target
-        android:name="circleGroup"
-        android:animation="@anim/ucrop_loader_circle_scale"/>
-    <target
-        android:name="circlePath"
-        android:animation="@anim/ucrop_loader_circle_path"/>
+        android:name="circlePath">
+        <aapt:attr name="android:animation">
+            <set>
+
+                <objectAnimator
+                    android:duration="@integer/ucrop_progress_loading_anim_time"
+                    android:propertyName="trimPathEnd"
+                    android:repeatCount="-1"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"/>
+
+                <objectAnimator
+                    android:duration="@integer/ucrop_progress_loading_anim_time"
+                    android:propertyName="strokeAlpha"
+                    android:repeatCount="-1"
+                    android:valueFrom="1"
+                    android:valueTo="0"
+                    android:valueType="floatType"/>
+
+            </set>
+        </aapt:attr>
+    </target>
 
 </animated-vector>
